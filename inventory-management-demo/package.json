@@ -1,0 +1,10 @@
+{
+  "name": "inventory-management-demo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Inventory Management Demo - database schema and migrations",
+  "scripts": {
+    "migrate": "node db/migrate.js",
+    "test:schema": "node db/test/schema.test.js"
+  }
+}
