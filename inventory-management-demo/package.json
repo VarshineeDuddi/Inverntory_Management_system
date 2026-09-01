@@ -7,7 +7,9 @@
     "start": "node src/server.js",
     "migrate": "node db/migrate.js",
     "test:schema": "node db/test/schema.test.js",
-    "test:api": "node --test test/api.test.js"
+    "test:api": "node --test test/api.test.js",
+    "test:validation": "node --test test/validation.test.js",
+    "test": "node --test test/api.test.js test/validation.test.js"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",
