@@ -36,6 +36,12 @@ Alternatives considered:
 **Responsive layout via CSS (flexbox/grid + media queries), no separate mobile app or component library.**
 Rationale: the AC only asks the page to work on desktop and mobile widths, not for native mobile support. Plain responsive CSS is enough and avoids a new dependency.
 
+**Dev-mode frontend-to-backend wiring: a Vite dev-server proxy, not CORS headers on the backend.**
+Rationale: the Vite dev server (port 5173) and the Express API (port 3000, from `add-product-crud-api`) are different origins, so the browser would block the page's `fetch` calls without either CORS support on the backend or same-origin routing. A `server.proxy` entry in `vite.config.js` forwards `/products` to `http://localhost:3000`, so the API client calls a relative URL (`/products`) that the dev server transparently forwards. This keeps the "no backend changes" scope in proposal.md - Impact intact, since nothing in `add-product-crud-api`'s Express app is touched.
+Alternatives considered:
+- *Add a `cors` middleware to the Express backend* — rejected: would modify `add-product-crud-api`'s already-proposed capability, which this change's proposal explicitly avoided.
+Trade-off: the proxy only exists in Vite's dev server, not in a production build (`vite build` + `vite preview`/static hosting) — acceptable per the Non-Goals' explicit exclusion of deployment/hosting concerns.
+
 ## Risks / Trade-offs
 
 - [Client-computed stock status could diverge from a future backend calculation if IMD-9 is later built with different thresholds] → Mitigation: the rule is written to mirror the BRD's own three named states exactly (In Stock / Low Stock / Out of Stock) using the fields already in the schema, so it's the most literal reading of the BRD available; if IMD-9 changes the rule, this page's derivation would need updating too — noted here so that story's author sees this dependency.
